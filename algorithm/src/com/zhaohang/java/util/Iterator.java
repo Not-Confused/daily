@@ -13,6 +13,7 @@ package com.zhaohang.java.util;
  * @param <E> the type of elements returned by this iterator.
  * 过去分词充当定语, 常置于所修饰的名词之后, 相当于定语从句, 但较定语从句简洁, 常用于书面语
  * the type of elements returned by this iterator.
+ *           the type
  * the type of elements which were returned by this iterator.
  */
 public interface Iterator<E> {
