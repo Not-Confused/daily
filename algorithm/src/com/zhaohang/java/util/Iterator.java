@@ -12,8 +12,8 @@ package com.zhaohang.java.util;
  * This interface is the member of the Java Collection Framework.
  * @param <E> the type of elements returned by this iterator.
  * 过去分词充当定语, 常置于所修饰的名词之后, 相当于定语从句, 但较定语从句简洁, 常用于书面语
+ * 过去分词充当定语,
  * the type of elements returned by this iterator.
- *           the type
  * the type of elements which were returned by this iterator.
  */
 public interface Iterator<E> {
@@ -24,4 +24,15 @@ public interface Iterator<E> {
      * @return: true if the iteration has more elements.
      */
     boolean hasNext();
+
+    /**
+     * Returns the next element in the iteration.
+     * @return: the next element in the iteration.
+     * Throws: NoSuchElementException - if the iteration has no more elements.
+     */
+    E next();
+
+    /**
+     *
+     */
 }
