@@ -242,7 +242,7 @@ public interface Collection<E> extends Iterable<E> {
         return removed;
     }
 
-
+    boolean retainAll(Collection<?> c);
 
 
 
