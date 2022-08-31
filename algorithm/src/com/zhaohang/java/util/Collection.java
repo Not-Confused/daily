@@ -82,7 +82,7 @@ public interface Collection<E> extends Iterable<E> {
      * Returns true if this collection contains no elements.
      * @return true if this collection contains no elements.
      */
-    Boolean isEmpty();
+    boolean isEmpty();
 
     /**
      * Return true if this collection contains specified element.
@@ -92,7 +92,7 @@ public interface Collection<E> extends Iterable<E> {
      * @throws ClassCastException - if the type of specified element is incompatible with this collection(optional)
      * NullPointerException - if the specified element is null and this collection does not permit null elements(optional)
      */
-    Boolean contains(Object o);
+    boolean contains(Object o);
 
     /**
      * Returns an iterator over elements in this collection.
@@ -242,9 +242,57 @@ public interface Collection<E> extends Iterable<E> {
         return removed;
     }
 
+    /**
+     * Retains only the elements in this collection that are obtained in the specified collection(optional operation).
+     * In other words, removes from this collection all of its elements that are not obtained in the specified collection.
+     * 现在分词作定语表示正在进行的含义, 单个词放在修饰词前, 短语放在修饰词后。
+     * 单个现在分词作前置定语, 相当于形容词, 有的现在分词直接就是形容词, 现在分词短语作定语, 相当于定语从句。
+     * 不定式短语作定语, 置于被修饰的名词或代词后, 表示将来的动作, 如与被修饰词只有动宾关系, 而无逻辑上的主谓关系, 则需用被动语态
+     * @param c collection containing the elements to be retained in this collection.
+     * @return true if this collection changed as a result of the call.
+     * @throws UnsupportedOperationException if the retainAll operation is not supported by this collection.
+     * @throws ClassCastException if the types of one or more elements in this collection are incompatible with the specified collection(optional)
+     * @throws NullPointerException if this collection contains one or more null elements and the specified collection does not permit null element(optional), or if the specified collection is null.
+     */
     boolean retainAll(Collection<?> c);
 
+    /**
+     * Removes all of the elements from this collection(optional operation).
+     * The collection will be empty after this method returns.
+     * @throws UnsupportedOperationException if the clear operation is not supported by this collection.
+     */
+    void clear();
 
+    // Comparison and hashing
+
+    /**
+     * Compares the specified collection with this collection for equality.
+     * While the Collection interface adds no stipulation to the general contract for the Object.equals,
+     * programmers who implement the Collection interface "directly" must exercise case if they choose to overview the Object.equals.
+     * It is no necessary to do so, and the simplest course of action is to rely on Objects implementation,
+     * but the programmer may wish to a "value comparison" in the place of the default "reference comparison".
+     * (The List or Set interfaces mandate the value comparison)
+     * The general contract for the Object.equals method states that equals must be symmetric
+     * (in the words, a.equals(b) if and only if b.equals(a)).
+     * The contracts of List.equals and Set.equals state that lists are only equal to other lists, and sets to other sets.
+     * Thus, a customer equals method for a collection class that implements neither List nor Set interface must return false
+     * when this collection is compared to any List or Set.
+     * (By the same logic, it is not possible to write a class that implements both List and Set interfaces.)
+     * 不定式作定语, 如与被修饰词只有动宾关系, 而无主谓关系, 则需用被动语态
+     * @param o object to be compared for equality with this collection.
+     * @return true if the specified object is equals to this collection.
+     */
+    boolean equals(Object o);
+
+    /**
+     * Returns the hash code value for this collection.
+     * While the Collection interface adds no stipulation to the general contract for this collection,
+     * programmers should take note that any class that overrides the Object.equals method must also override the Object.hash method
+     * in order to satisty the general contract for the Object.hashCode method.
+     * In particular, c1.equlas(c2) implies that c1.hashCode(c2).
+     * @return the hash code value for this collection
+     */
+    int hashCode();
 
 
 
