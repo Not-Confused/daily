@@ -115,7 +115,7 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
      */
     @Override
     public E remove(int index) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -135,6 +135,64 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
             }
         }
         return -1;
+    }
+
+    /**
+     * Returns the index of the last occurrence of the specified element in this list,
+     * or -1 if this list does not contain the element.
+     * This implementation first gets a list iterator that points to end of the list (with ListIterator(size()).
+     * Then, it iterates backwards over the list until the specified element is found, or the beginning of the list is reached.
+     * @param o
+     * @return
+     */
+    @Override
+    public int lastIndexOf(Object o) {
+        ListIterator<E> it = listIterator(size());
+        if (o == null) {
+            while (it.hasPrevious()) {
+                if (it.previous() == null) {
+                    return it.nextIndex();
+                }
+            }
+        } else {
+            while (it.hasPrevious()) {
+                if (o.equals(it.previous())) {
+                    return it.nextIndex();
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Removes all the element in this list.
+     * The list will be empty after this call returns.
+     */
+    public void clear() {
+        removeRange(0, size());
+    }
+
+    /**
+     * Inserts all the elements in the specified collection into this list at the specified position (optional operation).
+     * Shifts the element currently at that position (if any) and any subsequent elements to the right (increases their indices).
+     * The new element will appear in this list in the order that they are returned by the specified collection's iterator.
+     * The behavior of this operation is undefined if the specified collection is modified while the operation is in progress.
+     * (Note that this will occur if the specified collection is this list, and it's noneempty.)
+     *
+     *
+     * @param index
+     * @param c
+     * @return
+     */
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        rangeCheckForAdd(index);
+        boolean modified = false;
+        for (E e : c) {
+            add(index++, e);
+            modified = true;
+        }
+        return modified;
     }
 
     private class Itr implements Iterator<E> {
@@ -345,35 +403,6 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
-    }
-
-    /**
-     *
-     * @param o
-     * @return
-     */
-    @Override
-    public int lastIndexOf(Object o) {
-        ListIterator<E> it = listIterator(size());
-        if (o == null) {
-            while (it.hasPrevious()) {
-                if (it.previous() == null) {
-                    return it.nextIndex();
-                }
-            }
-        } else {
-            while (it.hasPrevious()) {
-                if (o.equals(it.previous())) {
-                    return it.nextIndex();
-                }
-            }
-        }
-        return -1;
-    }
-
-    @Override
     public ListIterator<E> listIterator() {
         return new ListItr(0);
     }
@@ -415,6 +444,15 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 
     /**
      * Checks weather the index of element for the add operation is out of range.
+     * Shifts any succeeding elements to the left (reduce their index).
+     * This call shortens the list by (toIndex - fromIndex) elements.
+     * (If fromIndex==toIndex, this operation has no effort.)
+     *
+     * This method is called by the clear operation on this list and its subLists.
+     * Overriding this method to take advantage of the internals of the list implementation
+     * can substantially improve the performance of the clear operation on this list and its subLists.
+     *
+     *
      * @param index
      */
     private void rangeCheckForAdd(int index) {
@@ -425,5 +463,32 @@ public abstract class AbstractList<E> extends AbstractCollection<E> implements L
 
     private String outOfBoundsMsg(int index) {
         return "Index: " + index + ", Size: " + size();
+    }
+
+    /**
+     * Removes from this list all the elements whose is between fromIndex, inclusive, and toIndex, exclusive.
+     * This call shortens the list by (toIndex - fromIndex) elements.
+     * (If toIndex==fromIndex, this operation has no effort.)
+     *
+     * This method is called by the clear operation on this list and its subLists.
+     * Overriding this method to take advantage of the internals of the list implementation
+     * can substantially improve the performance of the clear operation on this list and its subLists.
+     *
+     * This implementation gets a list iterator positioned before fromIndex,
+     * and repeatedly calls ListIterator.next followed by ListIterator.remove
+     * until the entire range has been removed.
+     *
+     * Note: if ListIterator.remove requires the linear time, this implementation requires quadratic time.
+     * @param fromIndex
+     * @param toIndex
+     */
+    protected void removeRange(int fromIndex, int toIndex) {
+        ListIterator<E> it = listIterator(fromIndex);
+        for (int i = 0, n = toIndex-fromIndex; i<n; i++) {
+            // Gets the element at the cursor position.
+            it.next();
+            // Remove the element at the cursor position.
+            it.remove();
+        }
     }
 }
